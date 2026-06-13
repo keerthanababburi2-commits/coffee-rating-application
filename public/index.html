@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BrewPulse - Discover, vote, and rate the world's finest coffee beans and brewing recipes.">
+  <title>BrewPulse | Premium Coffee Rating & Curation</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas for upvote particle effects -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <i class="ri-checkbox-circle-fill toast-icon"></i>
+    <span id="toastMessage" class="toast-text">Successful action!</span>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-content">
+        <div class="logo-area">
+          <div class="coffee-cup-icon">
+            <span class="steam steam-1"></span>
+            <span class="steam steam-2"></span>
+            <span class="steam steam-3"></span>
+            <i class="ri-cup-fill"></i>
+          </div>
+          <div class="logo-text">
+            <h1>BrewPulse</h1>
+            <p class="tagline">The Specialty Coffee Curation & Rating Lounge</p>
+          </div>
+        </div>
+        
+        <div class="header-actions">
+          <button id="openAddModalBtn" class="btn btn-primary btn-glow" aria-haspopup="dialog" aria-controls="addModal">
+            <i class="ri-add-line"></i>
+            <span>Add Custom Brew</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Banner -->
+      <div class="stats-banner">
+        <div class="stat-item">
+          <i class="ri-heart-3-fill icon-votes"></i>
+          <div class="stat-text">
+            <span class="stat-value" id="statTotalVotes">0</span>
+            <span class="stat-label">Total Upvotes</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <i class="ri-star-fill icon-rating"></i>
+          <div class="stat-text">
+            <span class="stat-value" id="statAvgRating">0.0</span>
+            <span class="stat-label">Average Rating</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <i class="ri-chat-3-fill icon-comments"></i>
+          <div class="stat-text">
+            <span class="stat-value" id="statTotalComments">0</span>
+            <span class="stat-label">Barista Reviews</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-layout">
+      <!-- Search & Filters Container -->
+      <section class="controls-section">
+        <div class="search-bar-wrapper">
+          <i class="ri-search-2-line search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search coffees, origins, or flavor profiles..." aria-label="Search coffee menu">
+          <button id="clearSearchBtn" class="clear-search-btn" style="display: none;" aria-label="Clear search">
+            <i class="ri-close-line"></i>
+          </button>
+        </div>
+
+        <div class="filters-row">
+          <!-- Category Tabs -->
+          <div class="category-tabs" role="tablist" aria-label="Coffee categories">
+            <button class="tab-btn active" role="tab" aria-selected="true" data-category="all">All Drinks</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-category="Espresso">Espresso</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-category="Milk Brew">Milk Brews</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-category="Cold Coffee">Cold Coffees</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-category="Filter">Filter Coffees</button>
+          </div>
+
+          <!-- Sorting Selector -->
+          <div class="sort-selector">
+            <label for="sortSelect" class="sort-label">Sort by</label>
+            <div class="select-wrapper">
+              <select id="sortSelect" aria-label="Sort coffees">
+                <option value="votes">Most Upvoted</option>
+                <option value="rating">Highest Rated</option>
+                <option value="name">A - Z</option>
+              </select>
+              <i class="ri-arrow-down-s-line select-arrow"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Coffee Cards Grid -->
+      <section class="coffee-grid-container">
+        <!-- Loader Skeleton (Visible when loading) -->
+        <div id="gridLoader" class="skeleton-grid" style="display: none;">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <i class="ri-compass-3-line empty-icon"></i>
+          <h3>No Brews Match Your Criteria</h3>
+          <p>Try refining your search query or choosing another category.</p>
+          <button id="resetFiltersBtn" class="btn btn-secondary">Reset Filters</button>
+        </div>
+
+        <!-- Actual Coffee Items Container -->
+        <div id="coffeeGrid" class="coffee-grid">
+          <!-- Dynamic cards injected here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <p>&copy; 2026 BrewPulse. Elevated Coffee Curation. Built with pure Javascript & Express.</p>
+    </footer>
+  </div>
+
+  <!-- DETAILS MODAL -->
+  <div id="detailModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-wrapper">
+      <div class="modal-card detailed-modal-card">
+        <button class="close-modal-btn" id="closeDetailModalBtn" aria-label="Close details dialog">
+          <i class="ri-close-line"></i>
+        </button>
+        
+        <div class="modal-split-layout">
+          <!-- Left Column: Coffee Info & Image -->
+          <div class="modal-detail-hero">
+            <div class="hero-image-container">
+              <img id="modalCoffeeImage" src="" alt="Coffee Image">
+              <span id="modalCoffeeCategory" class="badge category-badge">Espresso</span>
+            </div>
+            <div class="hero-info-card">
+              <h2 id="modalCoffeeName" class="font-serif">Coffee Name</h2>
+              
+              <div class="meta-row">
+                <span class="meta-item"><i class="ri-map-pin-2-line"></i> <span id="modalCoffeeOrigin">Origin</span></span>
+                <span class="meta-item"><i class="ri-fire-line"></i> <span id="modalCoffeeRoast">Roast</span></span>
+              </div>
+
+              <div class="flavor-profile-wrapper">
+                <h3>Flavor Profile</h3>
+                <div id="modalFlavorNotes" class="flavor-notes-pills">
+                  <!-- Injected dynamic badges -->
+                </div>
+              </div>
+
+              <div class="description-wrapper">
+                <h3>Brewmaster Notes</h3>
+                <p id="modalCoffeeDesc">A long detailed description about the coffee and its harvest notes...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Ratings, Reviews, Comments -->
+          <div class="modal-reviews-section">
+            <div class="rating-summary-card">
+              <h3>Vibe Check & Rating</h3>
+              
+              <div class="rating-row-flex">
+                <div class="rating-large-score">
+                  <span id="modalRatingScore" class="score-number">4.8</span>
+                  <div class="stars-display" id="modalRatingStars">
+                    <!-- Dynamic Star icons -->
+                  </div>
+                  <span id="modalRatingCount" class="reviews-count">based on 12 reviews</span>
+                </div>
+
+                <div class="quick-vote-box">
+                  <button id="modalVoteBtn" class="btn btn-vote-large">
+                    <i class="ri-heart-3-fill"></i>
+                    <span>Upvote Brew</span>
+                  </button>
+                  <span class="vote-label"><span id="modalVoteCount">0</span> Coffee Lovers Upvoted</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review / Comment Form -->
+            <div class="comment-form-container">
+              <h3>Submit Your Tasting Review</h3>
+              <form id="commentForm">
+                <div class="form-row">
+                  <div class="form-group flex-2">
+                    <label for="reviewName">Your Name / Handle</label>
+                    <input type="text" id="reviewName" placeholder="e.g. Barista Sam" required>
+                  </div>
+                  <div class="form-group flex-1">
+                    <label>Your Score</label>
+                    <div class="rating-input-stars">
+                      <input type="radio" name="starRating" id="star-5" value="5" required>
+                      <label for="star-5" class="ri-star-line star-picker-icon" title="5 stars"></label>
+                      
+                      <input type="radio" name="starRating" id="star-4" value="4">
+                      <label for="star-4" class="ri-star-line star-picker-icon" title="4 stars"></label>
+                      
+                      <input type="radio" name="starRating" id="star-3" value="3">
+                      <label for="star-3" class="ri-star-line star-picker-icon" title="3 stars"></label>
+                      
+                      <input type="radio" name="starRating" id="star-2" value="2">
+                      <label for="star-2" class="ri-star-line star-picker-icon" title="2 stars"></label>
+                      
+                      <input type="radio" name="starRating" id="star-1" value="1">
+                      <label for="star-1" class="ri-star-line star-picker-icon" title="1 star"></label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="reviewText">Tasting Commentary</label>
+                  <textarea id="reviewText" rows="3" placeholder="Describe the acidity, body, finish, or brewing recipe..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-secondary btn-full">Submit Barista Review</button>
+              </form>
+            </div>
+
+            <!-- Live Reviews Feed -->
+            <div class="reviews-feed-container">
+              <h3>Tasting Feed</h3>
+              <div id="reviewsFeed" class="reviews-feed">
+                <!-- Comments injected dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD BREW MODAL -->
+  <div id="addModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-wrapper">
+      <div class="modal-card add-modal-card">
+        <button class="close-modal-btn" id="closeAddModalBtn" aria-label="Close add brew dialog">
+          <i class="ri-close-line"></i>
+        </button>
+
+        <h2 class="font-serif form-title">Add a Custom Coffee Roast</h2>
+        <p class="form-subtitle">Enrich the BrewPulse list by cataloging a custom roast or brewing recipe.</p>
+
+        <form id="addCoffeeForm" class="grid-form">
+          <div class="form-group full-width">
+            <label for="coffeeName">Coffee Name / Blend Title</label>
+            <input type="text" id="coffeeName" placeholder="e.g. Sidamo Floral Nectar" required>
+          </div>
+
+          <div class="form-group">
+            <label for="coffeeCategory">Brew Category</label>
+            <div class="select-wrapper">
+              <select id="coffeeCategory" required>
+                <option value="Espresso">Espresso</option>
+                <option value="Milk Brew" selected>Milk Brew</option>
+                <option value="Cold Coffee">Cold Coffee</option>
+                <option value="Filter">Filter Coffee</option>
+              </select>
+              <i class="ri-arrow-down-s-line select-arrow"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="coffeeRoast">Roast Profile</label>
+            <div class="select-wrapper">
+              <select id="coffeeRoast" required>
+                <option value="Light Roast">Light Roast</option>
+                <option value="Medium Roast" selected>Medium Roast</option>
+                <option value="Medium-Dark Roast">Medium-Dark Roast</option>
+                <option value="Dark Roast">Dark Roast</option>
+              </select>
+              <i class="ri-arrow-down-s-line select-arrow"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="coffeeOrigin">Geographic Origin</label>
+            <input type="text" id="coffeeOrigin" placeholder="e.g. Tarrazu, Costa Rica" required>
+          </div>
+
+          <div class="form-group">
+            <label for="coffeeFlavors">Flavor Notes (comma separated)</label>
+            <input type="text" id="coffeeFlavors" placeholder="e.g. Cherry, Chocolate, Lemon" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="coffeeDesc">Roaster's Narrative & Description</label>
+            <textarea id="coffeeDesc" rows="4" placeholder="Briefly capture the farming altitude, processing method, and what makes this drink special..." required></textarea>
+          </div>
+
+          <div class="form-actions full-width">
+            <button type="button" id="cancelAddBtn" class="btn btn-text">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-glow">Catalog Drink</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

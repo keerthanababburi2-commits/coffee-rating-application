@@ -1,0 +1,146 @@
+[
+  {
+    "id": "espresso",
+    "name": "Midnight Velvet Espresso",
+    "category": "Espresso",
+    "description": "A thick, velvety shot of pure joy. Crafted from single-origin Colombian beans, it features a golden-tiger crema with a complex body and rich, sweet finish.",
+    "origin": "Huila, Colombia",
+    "roastLevel": "Dark Roast",
+    "flavorNotes": [
+      "Dark Chocolate",
+      "Caramel",
+      "Citrus Peel"
+    ],
+    "votes": 39,
+    "ratingSum": 191,
+    "ratingCount": 40,
+    "imageUrl": "/images/espresso.png",
+    "comments": [
+      {
+        "id": "c_1781355522725_zak0g",
+        "name": "Test Reviewer",
+        "rating": 4,
+        "text": "Tastes like success!",
+        "date": "2026-06-13T12:58:42.725Z"
+      },
+      {
+        "id": "c1",
+        "name": "Alex M.",
+        "rating": 5,
+        "text": "This is the benchmark for a perfect espresso. Dense crema, zero bitterness, pure chocolate notes.",
+        "date": "2026-06-12T14:30:00.000Z"
+      },
+      {
+        "id": "c2",
+        "name": "Sarah T.",
+        "rating": 4,
+        "text": "Very intense and syrup-like. Excellent kick in the morning!",
+        "date": "2026-06-13T08:15:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "cappuccino",
+    "name": "Golden Crema Cappuccino",
+    "category": "Milk Brew",
+    "description": "An exquisite balance of rich espresso, steamed milk, and a dense layer of micro-foam, decorated with delicate barista latte art.",
+    "origin": "Sidamo, Ethiopia",
+    "roastLevel": "Medium Roast",
+    "flavorNotes": [
+      "Blueberry",
+      "Honey",
+      "Toasted Almond"
+    ],
+    "votes": 45,
+    "ratingSum": 215,
+    "ratingCount": 45,
+    "imageUrl": "/images/cappuccino.png",
+    "comments": [
+      {
+        "id": "c3",
+        "name": "David K.",
+        "rating": 5,
+        "text": "The foam is so silky! Almost like drinking velvet. Ethiopia beans shine through.",
+        "date": "2026-06-11T16:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "cold_brew",
+    "name": "Caramel Swirl Cold Brew",
+    "category": "Cold Coffee",
+    "description": "Steeped slowly for 18 hours in cold spring water to extract sweet flavor notes with low acidity. Served over crystal ice with a ribbon of organic cream.",
+    "origin": "Antigua, Guatemala",
+    "roastLevel": "Medium-Dark Roast",
+    "flavorNotes": [
+      "Cacao Nibs",
+      "Brown Sugar",
+      "Vanilla Bean"
+    ],
+    "votes": 62,
+    "ratingSum": 298,
+    "ratingCount": 62,
+    "imageUrl": "/images/cold_brew.png",
+    "comments": [
+      {
+        "id": "c4",
+        "name": "Emma W.",
+        "rating": 5,
+        "text": "So smooth! Absolutely perfect for hot afternoons. The vanilla sweetness is very subtle and natural.",
+        "date": "2026-06-13T10:45:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "latte",
+    "name": "Iced Honeycomb Latte",
+    "category": "Milk Brew",
+    "description": "Chilled espresso and milk infused with wild honey, poured over ice and crowned with crushed honeycomb candy for a delightful crunch.",
+    "origin": "Chiapas, Mexico",
+    "roastLevel": "Medium Roast",
+    "flavorNotes": [
+      "Floral Honey",
+      "Hazelnut",
+      "Cinnamon"
+    ],
+    "votes": 29,
+    "ratingSum": 130,
+    "ratingCount": 29,
+    "imageUrl": "/images/latte.png",
+    "comments": [
+      {
+        "id": "c5",
+        "name": "Lucas B.",
+        "rating": 4,
+        "text": "A bit on the sweeter side, but the crunch from the honeycomb makes it a unique experience.",
+        "date": "2026-06-12T11:10:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pour_over",
+    "name": "Yirgacheffe Bloom Pour Over",
+    "category": "Filter",
+    "description": "Hand-brewed meticulously using V60 dripper. Displays tea-like transparency, vibrant acidity, and an incredibly clean floral cup.",
+    "origin": "Yirgacheffe, Ethiopia",
+    "roastLevel": "Light Roast",
+    "flavorNotes": [
+      "Jasmine",
+      "Lemon Zest",
+      "Bergamot"
+    ],
+    "votes": 54,
+    "ratingSum": 265,
+    "ratingCount": 54,
+    "imageUrl": "/images/pour_over.png",
+    "comments": [
+      {
+        "id": "c6",
+        "name": "Sophia L.",
+        "rating": 5,
+        "text": "This tastes like jasmine tea with coffee undertones. Exquisite light roast!",
+        "date": "2026-06-13T12:00:00.000Z"
+      }
+    ]
+  }
+]
